@@ -15,13 +15,14 @@ const PostForm = ({ action, actionText, ...props }) => {
   const [content, setContent] = useState(props.content || '');
   const [contentError, setContentError] = useState(false);
   const [dateError, setDateError] = useState(false);
+  const [category, setCategory] = useState(props.category || '');
   const { register, handleSubmit: validate, formState: { errors } } = useForm();
 
   const handleSubmit = (e) => {
     setContentError(!content)
     setDateError(!publishedDate)
     if (content && publishedDate) {
-      action({ title, author, publishedDate, shortDescription, content });
+      action({ title, author, publishedDate, shortDescription, content, category });
     }
   };
 
@@ -64,6 +65,20 @@ const PostForm = ({ action, actionText, ...props }) => {
           Date can't be empty</small>}
       </Form.Group>
 
+      <Form.Group className="mb-3">
+        <Form.Label>Disabled select menu</Form.Label>
+        <Form.Select
+          {...register('category', { required: true })}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option>Select category...</option>
+          <option value='Sport'>Sport</option>
+          <option value='Movies'>Movies</option>
+          <option value='News'>News</option>
+        </Form.Select>
+      </Form.Group>
+
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         <Form.Label>Short description </Form.Label>
         <Form.Control
@@ -89,7 +104,7 @@ const PostForm = ({ action, actionText, ...props }) => {
           Content can't be empty</small>}
       </Form.Group>
 
-      <Button variant="primary" onClick={handleSubmit}>
+      <Button variant="primary" type='submit'>
         {actionText}
       </Button>
     </Form>
